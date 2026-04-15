@@ -1,0 +1,6 @@
+@SplitRight.API_HostAddress = http://localhost:5225
+
+GET {{SplitRight.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

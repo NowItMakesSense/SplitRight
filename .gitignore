@@ -1,0 +1,6 @@
+.vs/
+SplitRight.API/appsettings.json
+SplitRight.API/appsettings.Production.json
+SplitRight.API/appsettings.Development.json
+SplitRight.API/bin/Debug/net10.0/appsettings.Production.json
+SplitRight.API/bin/Debug/net10.0/appsettings.Development.json

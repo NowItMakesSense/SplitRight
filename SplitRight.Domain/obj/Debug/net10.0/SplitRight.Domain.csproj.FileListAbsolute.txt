@@ -1,0 +1,13 @@
+D:\Projetos\Estudos\C#\SplitRight\SplitRight.Domain\bin\Debug\net10.0\SplitRight.Domain.deps.json
+D:\Projetos\Estudos\C#\SplitRight\SplitRight.Domain\bin\Debug\net10.0\SplitRight.Domain.dll
+D:\Projetos\Estudos\C#\SplitRight\SplitRight.Domain\bin\Debug\net10.0\SplitRight.Domain.pdb
+D:\Projetos\Estudos\C#\SplitRight\SplitRight.Domain\obj\Debug\net10.0\SplitRight.Domain.csproj.AssemblyReference.cache
+D:\Projetos\Estudos\C#\SplitRight\SplitRight.Domain\obj\Debug\net10.0\SplitRight.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projetos\Estudos\C#\SplitRight\SplitRight.Domain\obj\Debug\net10.0\SplitRight.Domain.AssemblyInfoInputs.cache
+D:\Projetos\Estudos\C#\SplitRight\SplitRight.Domain\obj\Debug\net10.0\SplitRight.Domain.AssemblyInfo.cs
+D:\Projetos\Estudos\C#\SplitRight\SplitRight.Domain\obj\Debug\net10.0\SplitRight.Domain.csproj.CoreCompileInputs.cache
+D:\Projetos\Estudos\C#\SplitRight\SplitRight.Domain\obj\Debug\net10.0\SplitRight.Domain.sourcelink.json
+D:\Projetos\Estudos\C#\SplitRight\SplitRight.Domain\obj\Debug\net10.0\SplitRight.Domain.dll
+D:\Projetos\Estudos\C#\SplitRight\SplitRight.Domain\obj\Debug\net10.0\refint\SplitRight.Domain.dll
+D:\Projetos\Estudos\C#\SplitRight\SplitRight.Domain\obj\Debug\net10.0\SplitRight.Domain.pdb
+D:\Projetos\Estudos\C#\SplitRight\SplitRight.Domain\obj\Debug\net10.0\ref\SplitRight.Domain.dll

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SplitRight.Domain.Contracts.Entities;
 using SplitRight.Infrastructure.Contracts.Interfaces;
 
 namespace SplitRight.Infrastructure.Contracts.Services
@@ -8,6 +9,10 @@ namespace SplitRight.Infrastructure.Contracts.Services
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
+
+        public DbSet<User> Users => Set<User>();
+
+        public DbSet<UserRefreshToken> UsersRefreshToken => Set<UserRefreshToken>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

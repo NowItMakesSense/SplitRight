@@ -1,0 +1,479 @@
+2026-04-15 20:56:34.697 -03:00 [INF] Executed DbCommand (289ms) [Parameters=[], CommandType='"Text"', CommandTimeout='60']
+CREATE DATABASE [SplitRightDEV];
+2026-04-15 20:56:34.800 -03:00 [INF] Executed DbCommand (59ms) [Parameters=[], CommandType='"Text"', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [SplitRightDEV] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2026-04-15 20:56:34.843 -03:00 [INF] Executed DbCommand (27ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2026-04-15 20:56:34.847 -03:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-04-15 20:56:34.889 -03:00 [INF] Executed DbCommand (39ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_getapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session', @LockMode = 'Exclusive';
+SELECT @result
+2026-04-15 20:56:34.963 -03:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+BEGIN
+    CREATE TABLE [__EFMigrationsHistory] (
+        [MigrationId] nvarchar(150) NOT NULL,
+        [ProductVersion] nvarchar(32) NOT NULL,
+        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+    );
+END;
+2026-04-15 20:56:34.973 -03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2026-04-15 20:56:34.974 -03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2026-04-15 20:56:34.990 -03:00 [INF] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2026-04-15 20:56:35.002 -03:00 [INF] Applying migration '20260415235551_InitialCreate'.
+2026-04-15 20:56:35.031 -03:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Users] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(150) NOT NULL,
+    [Email] nvarchar(200) NOT NULL,
+    [PasswordHash] nvarchar(max) NOT NULL,
+    [PhotoPath] nvarchar(max) NOT NULL,
+    [Role] int NOT NULL,
+    [CreatedAt] datetimeoffset NOT NULL,
+    [UpdatedAt] datetimeoffset NULL,
+    [IsDeleted] bit NOT NULL,
+    [DeletedAt] datetimeoffset NULL,
+    CONSTRAINT [PK_Users] PRIMARY KEY ([Id])
+);
+2026-04-15 20:56:35.035 -03:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserRefreshToken] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [Token] nvarchar(500) NOT NULL,
+    [SessionId] uniqueidentifier NOT NULL,
+    [ExpiresAt] datetimeoffset NOT NULL,
+    [IsRevoked] bit NOT NULL,
+    [RevokedAt] datetimeoffset NULL,
+    [ReplacedByToken] nvarchar(max) NULL,
+    [CreatedAt] datetimeoffset NOT NULL,
+    [UpdatedAt] datetimeoffset NULL,
+    [IsDeleted] bit NOT NULL,
+    [DeletedAt] datetimeoffset NULL,
+    CONSTRAINT [PK_UserRefreshToken] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserRefreshToken_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2026-04-15 20:56:35.037 -03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_UserRefreshToken_Token] ON [UserRefreshToken] ([Token]);
+2026-04-15 20:56:35.039 -03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserRefreshToken_UserId] ON [UserRefreshToken] ([UserId]);
+2026-04-15 20:56:35.041 -03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Users_Email] ON [Users] ([Email]);
+2026-04-15 20:56:35.045 -03:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20260415235551_InitialCreate', N'10.0.6');
+2026-04-15 20:56:35.051 -03:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_releaseapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session';
+SELECT @result
+2026-04-15 20:56:48.646 -03:00 [INF] User profile is available. Using 'C:\Users\Arnaldinho\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-15 20:56:49.142 -03:00 [INF] Now listening on: https://localhost:7298
+2026-04-15 20:56:49.144 -03:00 [INF] Now listening on: http://localhost:5225
+2026-04-15 20:56:49.197 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-15 20:56:49.198 -03:00 [INF] Hosting environment: Development
+2026-04-15 20:56:49.198 -03:00 [INF] Content root path: D:\Projetos\Estudos\C#\SplitRight\SplitRight.API
+2026-04-15 20:57:08.042 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7298/scalar - null null
+2026-04-15 20:57:11.982 -03:00 [INF] Executing endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 20:57:12.028 -03:00 [INF] Executing RedirectResult, redirecting to scalar/.
+2026-04-15 20:57:12.031 -03:00 [INF] Executed endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 20:57:12.039 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7298/scalar - 302 null null 4031.4152ms
+2026-04-15 20:57:12.050 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7298/scalar/ - null null
+2026-04-15 20:57:12.057 -03:00 [INF] Executing endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 20:57:12.250 -03:00 [INF] Write content with HTTP Response ContentType of text/html
+2026-04-15 20:57:12.306 -03:00 [INF] Executed endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 20:57:12.319 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7298/scalar/ - 200 null text/html 268.8309ms
+2026-04-15 20:57:12.914 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7298/scalar/scalar.js - null null
+2026-04-15 20:57:12.914 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7298/scalar/scalar.aspnetcore.js - null null
+2026-04-15 20:57:12.915 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7298/_framework/aspnetcore-browser-refresh.js - null null
+2026-04-15 20:57:12.939 -03:00 [INF] Executing endpoint 'HTTP: GET /scalar/scalar.aspnetcore.js'
+2026-04-15 20:57:12.939 -03:00 [INF] Executing endpoint 'HTTP: GET /scalar/scalar.js'
+2026-04-15 20:57:12.974 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7298/_vs/browserLink - null null
+2026-04-15 20:57:12.982 -03:00 [INF] Sending file with download name ''.
+2026-04-15 20:57:12.986 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7298/_framework/aspnetcore-browser-refresh.js - 200 14933 application/javascript; charset=utf-8 71.8643ms
+2026-04-15 20:57:13.008 -03:00 [INF] Executed endpoint 'HTTP: GET /scalar/scalar.aspnetcore.js'
+2026-04-15 20:57:12.992 -03:00 [INF] Sending file with download name ''.
+2026-04-15 20:57:13.028 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7298/scalar/scalar.aspnetcore.js - 200 1111 text/javascript 114.0396ms
+2026-04-15 20:57:13.131 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7298/_vs/browserLink - 200 null text/javascript; charset=UTF-8 156.2257ms
+2026-04-15 20:57:13.136 -03:00 [INF] Executed endpoint 'HTTP: GET /scalar/scalar.js'
+2026-04-15 20:57:13.195 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7298/scalar/scalar.js - 200 1115490 text/javascript 281.1099ms
+2026-04-15 20:57:13.924 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7298/openapi/v1.json - null null
+2026-04-15 20:57:13.945 -03:00 [INF] Executing endpoint 'HTTP: GET /openapi/{documentName}.json'
+2026-04-15 20:57:13.983 -03:00 [INF] Executed endpoint 'HTTP: GET /openapi/{documentName}.json'
+2026-04-15 20:57:13.986 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7298/openapi/v1.json - 200 null application/json;charset=utf-8 61.884ms
+2026-04-15 20:57:15.178 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7298/scalar/favicon.svg - null null
+2026-04-15 20:57:15.185 -03:00 [INF] Executing endpoint 'HTTP: GET /scalar/favicon.svg'
+2026-04-15 20:57:15.186 -03:00 [INF] Sending file with download name ''.
+2026-04-15 20:57:15.188 -03:00 [INF] Executed endpoint 'HTTP: GET /scalar/favicon.svg'
+2026-04-15 20:57:15.189 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7298/scalar/favicon.svg - 200 533 image/svg+xml 12.1579ms
+2026-04-15 20:57:37.439 -03:00 [INF] Request starting HTTP/2 POST https://localhost:7298/api/User - application/json 93
+2026-04-15 20:57:37.447 -03:00 [INF] Executing endpoint 'SplitRight.API.Controllers.UserController.Register (SplitRight.API)'
+2026-04-15 20:57:37.505 -03:00 [INF] Route matched with {action = "Register", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(SplitRight.Application.Features.Users.Commands.RegisterUserCommand, System.Threading.CancellationToken) on controller SplitRight.API.Controllers.UserController (SplitRight.API).
+2026-04-15 20:57:37.557 -03:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-04-15 20:57:42.500 -03:00 [INF] Executed DbCommand (531ms) [Parameters=[@email='?' (Size = 200)], CommandType='"Text"', CommandTimeout='30']
+SELECT [u1].[Id], [u1].[CreatedAt], [u1].[DeletedAt], [u1].[Email], [u1].[IsDeleted], [u1].[Name], [u1].[PasswordHash], [u1].[PhotoPath], [u1].[Role], [u1].[UpdatedAt], [u0].[Id], [u0].[CreatedAt], [u0].[DeletedAt], [u0].[ExpiresAt], [u0].[IsDeleted], [u0].[IsRevoked], [u0].[ReplacedByToken], [u0].[RevokedAt], [u0].[SessionId], [u0].[Token], [u0].[UpdatedAt], [u0].[UserId]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[CreatedAt], [u].[DeletedAt], [u].[Email], [u].[IsDeleted], [u].[Name], [u].[PasswordHash], [u].[PhotoPath], [u].[Role], [u].[UpdatedAt]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit) AND [u].[Email] = @email AND [u].[IsDeleted] = CAST(0 AS bit)
+) AS [u1]
+LEFT JOIN [UserRefreshToken] AS [u0] ON [u1].[Id] = [u0].[UserId]
+ORDER BY [u1].[Id]
+2026-04-15 20:57:43.174 -03:00 [ERR] Failed executing DbCommand (51ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = DateTimeOffset), @p2='?' (DbType = DateTimeOffset), @p3='?' (Size = 200), @p4='?' (DbType = Boolean), @p5='?' (Size = 150), @p6='?' (Size = 4000), @p7='?' (Size = 4000), @p8='?' (DbType = Int32), @p9='?' (DbType = DateTimeOffset)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Users] ([Id], [CreatedAt], [DeletedAt], [Email], [IsDeleted], [Name], [PasswordHash], [PhotoPath], [Role], [UpdatedAt])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+2026-04-15 20:57:43.313 -03:00 [ERR] An exception occurred in the database while saving changes for context type 'SplitRight.Infrastructure.Contracts.Services.AppDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'PhotoPath', table 'SplitRightDEV.dbo.Users'; column does not allow nulls. INSERT fails.
+The statement has been terminated.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__195_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:56959847-ad86-4f53-bb03-e8ccbfbe9b1d
+Error Number:515,State:2,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'PhotoPath', table 'SplitRightDEV.dbo.Users'; column does not allow nulls. INSERT fails.
+The statement has been terminated.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__195_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:56959847-ad86-4f53-bb03-e8ccbfbe9b1d
+Error Number:515,State:2,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2026-04-15 21:00:13.156 -03:00 [INF] Executed DbCommand (189ms) [Parameters=[], CommandType='"Text"', CommandTimeout='60']
+CREATE DATABASE [SplitRightDEV];
+2026-04-15 21:00:13.258 -03:00 [INF] Executed DbCommand (55ms) [Parameters=[], CommandType='"Text"', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [SplitRightDEV] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2026-04-15 21:00:13.280 -03:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2026-04-15 21:00:13.285 -03:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-04-15 21:00:13.315 -03:00 [INF] Executed DbCommand (27ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_getapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session', @LockMode = 'Exclusive';
+SELECT @result
+2026-04-15 21:00:13.394 -03:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+BEGIN
+    CREATE TABLE [__EFMigrationsHistory] (
+        [MigrationId] nvarchar(150) NOT NULL,
+        [ProductVersion] nvarchar(32) NOT NULL,
+        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+    );
+END;
+2026-04-15 21:00:13.403 -03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2026-04-15 21:00:13.404 -03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2026-04-15 21:00:13.416 -03:00 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2026-04-15 21:00:13.428 -03:00 [INF] Applying migration '20260415235957_InitialCreate'.
+2026-04-15 21:00:13.453 -03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Users] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(150) NOT NULL,
+    [Email] nvarchar(200) NOT NULL,
+    [PasswordHash] nvarchar(max) NOT NULL,
+    [PhotoPath] nvarchar(max) NULL,
+    [Role] int NOT NULL,
+    [CreatedAt] datetimeoffset NOT NULL,
+    [UpdatedAt] datetimeoffset NULL,
+    [IsDeleted] bit NOT NULL,
+    [DeletedAt] datetimeoffset NULL,
+    CONSTRAINT [PK_Users] PRIMARY KEY ([Id])
+);
+2026-04-15 21:00:13.457 -03:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserRefreshToken] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [Token] nvarchar(500) NOT NULL,
+    [SessionId] uniqueidentifier NOT NULL,
+    [ExpiresAt] datetimeoffset NOT NULL,
+    [IsRevoked] bit NOT NULL,
+    [RevokedAt] datetimeoffset NULL,
+    [ReplacedByToken] nvarchar(max) NULL,
+    [CreatedAt] datetimeoffset NOT NULL,
+    [UpdatedAt] datetimeoffset NULL,
+    [IsDeleted] bit NOT NULL,
+    [DeletedAt] datetimeoffset NULL,
+    CONSTRAINT [PK_UserRefreshToken] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserRefreshToken_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2026-04-15 21:00:13.458 -03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_UserRefreshToken_Token] ON [UserRefreshToken] ([Token]);
+2026-04-15 21:00:13.459 -03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserRefreshToken_UserId] ON [UserRefreshToken] ([UserId]);
+2026-04-15 21:00:13.460 -03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Users_Email] ON [Users] ([Email]);
+2026-04-15 21:00:13.465 -03:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20260415235957_InitialCreate', N'10.0.6');
+2026-04-15 21:00:13.469 -03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_releaseapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session';
+SELECT @result
+2026-04-15 21:01:15.301 -03:00 [INF] User profile is available. Using 'C:\Users\Arnaldinho\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-15 21:01:15.680 -03:00 [INF] Now listening on: https://localhost:7298
+2026-04-15 21:01:15.681 -03:00 [INF] Now listening on: http://localhost:5225
+2026-04-15 21:01:15.734 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-15 21:01:15.735 -03:00 [INF] Hosting environment: Development
+2026-04-15 21:01:15.736 -03:00 [INF] Content root path: D:\Projetos\Estudos\C#\SplitRight\SplitRight.API
+2026-04-15 21:01:32.806 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7298/scalar/ - null null
+2026-04-15 21:01:33.294 -03:00 [INF] Executing endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 21:01:33.676 -03:00 [INF] Write content with HTTP Response ContentType of text/html
+2026-04-15 21:01:33.715 -03:00 [INF] Executed endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 21:01:33.779 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7298/scalar/scalar.js - null null
+2026-04-15 21:01:33.777 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7298/_framework/aspnetcore-browser-refresh.js - null null
+2026-04-15 21:01:33.805 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7298/scalar/scalar.aspnetcore.js - null null
+2026-04-15 21:01:33.811 -03:00 [INF] Executing endpoint 'HTTP: GET /scalar/scalar.js'
+2026-04-15 21:01:33.814 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7298/scalar/ - 200 null text/html 1022.9795ms
+2026-04-15 21:01:33.818 -03:00 [INF] Executing endpoint 'HTTP: GET /scalar/scalar.aspnetcore.js'
+2026-04-15 21:01:33.834 -03:00 [INF] Sending file with download name ''.
+2026-04-15 21:01:33.834 -03:00 [INF] Sending file with download name ''.
+2026-04-15 21:01:33.841 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7298/_vs/browserLink - null null
+2026-04-15 21:01:33.845 -03:00 [INF] Executed endpoint 'HTTP: GET /scalar/scalar.aspnetcore.js'
+2026-04-15 21:01:33.847 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7298/_framework/aspnetcore-browser-refresh.js - 200 14933 application/javascript; charset=utf-8 69.5163ms
+2026-04-15 21:01:33.848 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7298/scalar/scalar.aspnetcore.js - 200 1111 text/javascript 43.3218ms
+2026-04-15 21:01:33.967 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7298/_vs/browserLink - 200 null text/javascript; charset=UTF-8 126.7829ms
+2026-04-15 21:01:33.973 -03:00 [INF] Executed endpoint 'HTTP: GET /scalar/scalar.js'
+2026-04-15 21:01:33.986 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7298/scalar/scalar.js - 200 1115490 text/javascript 206.8552ms
+2026-04-15 21:01:34.906 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7298/openapi/v1.json - null null
+2026-04-15 21:01:35.000 -03:00 [INF] Executing endpoint 'HTTP: GET /openapi/{documentName}.json'
+2026-04-15 21:01:35.031 -03:00 [INF] Executed endpoint 'HTTP: GET /openapi/{documentName}.json'
+2026-04-15 21:01:35.032 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7298/openapi/v1.json - 200 null application/json;charset=utf-8 126.0835ms
+2026-04-15 21:01:35.632 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7298/scalar/favicon.svg - null null
+2026-04-15 21:01:35.665 -03:00 [INF] Executing endpoint 'HTTP: GET /scalar/favicon.svg'
+2026-04-15 21:01:35.669 -03:00 [INF] Sending file with download name ''.
+2026-04-15 21:01:35.672 -03:00 [INF] Executed endpoint 'HTTP: GET /scalar/favicon.svg'
+2026-04-15 21:01:35.676 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7298/scalar/favicon.svg - 200 533 image/svg+xml 44.5121ms
+2026-04-15 21:01:50.571 -03:00 [INF] Request starting HTTP/2 POST https://localhost:7298/api/User - application/json 93
+2026-04-15 21:01:50.575 -03:00 [INF] Executing endpoint 'SplitRight.API.Controllers.UserController.Register (SplitRight.API)'
+2026-04-15 21:01:50.622 -03:00 [INF] Route matched with {action = "Register", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(SplitRight.Application.Features.Users.Commands.RegisterUserCommand, System.Threading.CancellationToken) on controller SplitRight.API.Controllers.UserController (SplitRight.API).
+2026-04-15 21:01:50.657 -03:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-04-15 21:01:53.892 -03:00 [INF] Executed DbCommand (180ms) [Parameters=[@email='?' (Size = 200)], CommandType='"Text"', CommandTimeout='30']
+SELECT [u1].[Id], [u1].[CreatedAt], [u1].[DeletedAt], [u1].[Email], [u1].[IsDeleted], [u1].[Name], [u1].[PasswordHash], [u1].[PhotoPath], [u1].[Role], [u1].[UpdatedAt], [u0].[Id], [u0].[CreatedAt], [u0].[DeletedAt], [u0].[ExpiresAt], [u0].[IsDeleted], [u0].[IsRevoked], [u0].[ReplacedByToken], [u0].[RevokedAt], [u0].[SessionId], [u0].[Token], [u0].[UpdatedAt], [u0].[UserId]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[CreatedAt], [u].[DeletedAt], [u].[Email], [u].[IsDeleted], [u].[Name], [u].[PasswordHash], [u].[PhotoPath], [u].[Role], [u].[UpdatedAt]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit) AND [u].[Email] = @email AND [u].[IsDeleted] = CAST(0 AS bit)
+) AS [u1]
+LEFT JOIN [UserRefreshToken] AS [u0] ON [u1].[Id] = [u0].[UserId]
+ORDER BY [u1].[Id]
+2026-04-15 21:01:54.502 -03:00 [INF] Executed DbCommand (18ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = DateTimeOffset), @p2='?' (DbType = DateTimeOffset), @p3='?' (Size = 200), @p4='?' (DbType = Boolean), @p5='?' (Size = 150), @p6='?' (Size = 4000), @p7='?' (Size = 4000), @p8='?' (DbType = Int32), @p9='?' (DbType = DateTimeOffset)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Users] ([Id], [CreatedAt], [DeletedAt], [Email], [IsDeleted], [Name], [PasswordHash], [PhotoPath], [Role], [UpdatedAt])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+2026-04-15 21:01:54.540 -03:00 [INF] Executing CreatedAtActionResult, writing value of type 'SplitRight.Application.DTOs.UserDTO'.
+2026-04-15 21:01:54.604 -03:00 [INF] Executed action SplitRight.API.Controllers.UserController.Register (SplitRight.API) in 3970.6686ms
+2026-04-15 21:01:54.606 -03:00 [INF] Executed endpoint 'SplitRight.API.Controllers.UserController.Register (SplitRight.API)'
+2026-04-15 21:01:54.617 -03:00 [INF] Request finished HTTP/2 POST https://localhost:7298/api/User - 201 null application/json; charset=utf-8 4046.8714ms
+2026-04-15 21:02:11.766 -03:00 [INF] Request starting HTTP/2 POST https://localhost:7298/api/Auth/login - application/json 59
+2026-04-15 21:02:11.771 -03:00 [INF] Executing endpoint 'SplitRight.API.Controllers.AuthController.Login (SplitRight.API)'
+2026-04-15 21:02:11.782 -03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(SplitRight.Application.Features.Auth.Commands.LoginUserCommand, System.Threading.CancellationToken) on controller SplitRight.API.Controllers.AuthController (SplitRight.API).
+2026-04-15 21:02:11.916 -03:00 [INF] Executed DbCommand (17ms) [Parameters=[@email='?' (Size = 200)], CommandType='"Text"', CommandTimeout='30']
+SELECT [u1].[Id], [u1].[CreatedAt], [u1].[DeletedAt], [u1].[Email], [u1].[IsDeleted], [u1].[Name], [u1].[PasswordHash], [u1].[PhotoPath], [u1].[Role], [u1].[UpdatedAt], [u0].[Id], [u0].[CreatedAt], [u0].[DeletedAt], [u0].[ExpiresAt], [u0].[IsDeleted], [u0].[IsRevoked], [u0].[ReplacedByToken], [u0].[RevokedAt], [u0].[SessionId], [u0].[Token], [u0].[UpdatedAt], [u0].[UserId]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[CreatedAt], [u].[DeletedAt], [u].[Email], [u].[IsDeleted], [u].[Name], [u].[PasswordHash], [u].[PhotoPath], [u].[Role], [u].[UpdatedAt]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit) AND [u].[Email] = @email AND [u].[IsDeleted] = CAST(0 AS bit)
+) AS [u1]
+LEFT JOIN [UserRefreshToken] AS [u0] ON [u1].[Id] = [u0].[UserId]
+ORDER BY [u1].[Id]
+2026-04-15 21:02:42.455 -03:00 [INF] Executed action SplitRight.API.Controllers.AuthController.Login (SplitRight.API) in 30670.1686ms
+2026-04-15 21:02:42.460 -03:00 [INF] Executed endpoint 'SplitRight.API.Controllers.AuthController.Login (SplitRight.API)'
+2026-04-15 21:02:42.542 -03:00 [ERR] Erro inesperado
+System.ArgumentNullException: Value cannot be null. (Parameter 's')
+   at System.ArgumentNullException.Throw(String paramName)
+   at System.Text.Encoding.GetBytes(String s)
+   at SplitRight.Domain.Contracts.Services.TokenService.GenerateAccessToken(User user, Guid sessionId) in D:\Projetos\Estudos\C#\SplitRight\SplitRight.Domain\Contracts\Services\TokenService.cs:line 32
+   at SplitRight.Application.Features.Auth.Handlers.LoginUserCommandHandler.Handle(LoginUserCommand request, CancellationToken cancellationToken) in D:\Projetos\Estudos\C#\SplitRight\SplitRight.Application\Features\Auth\Handlers\LoginUserCommandHandler.cs:line 43
+   at SplitRight.API.Controllers.AuthController.Login(LoginUserCommand command, CancellationToken cancellationToken) in D:\Projetos\Estudos\C#\SplitRight\SplitRight.API\Controllers\AuthController.cs:line 23
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at SplitRight.API.Middlewares.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in D:\Projetos\Estudos\C#\SplitRight\SplitRight.API\Middlewares\GlobalExceptionMiddleware.cs:line 20
+2026-04-15 21:02:42.599 -03:00 [INF] Request finished HTTP/2 POST https://localhost:7298/api/Auth/login - 500 null application/json; charset=utf-8 30833.7124ms
+2026-04-15 21:02:44.932 -03:00 [INF] Request starting HTTP/2 POST https://localhost:7298/api/Auth/login - application/json 59
+2026-04-15 21:02:44.938 -03:00 [INF] Executing endpoint 'SplitRight.API.Controllers.AuthController.Login (SplitRight.API)'
+2026-04-15 21:02:44.939 -03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(SplitRight.Application.Features.Auth.Commands.LoginUserCommand, System.Threading.CancellationToken) on controller SplitRight.API.Controllers.AuthController (SplitRight.API).
+2026-04-15 21:02:44.971 -03:00 [INF] Executed DbCommand (7ms) [Parameters=[@email='?' (Size = 200)], CommandType='"Text"', CommandTimeout='30']
+SELECT [u1].[Id], [u1].[CreatedAt], [u1].[DeletedAt], [u1].[Email], [u1].[IsDeleted], [u1].[Name], [u1].[PasswordHash], [u1].[PhotoPath], [u1].[Role], [u1].[UpdatedAt], [u0].[Id], [u0].[CreatedAt], [u0].[DeletedAt], [u0].[ExpiresAt], [u0].[IsDeleted], [u0].[IsRevoked], [u0].[ReplacedByToken], [u0].[RevokedAt], [u0].[SessionId], [u0].[Token], [u0].[UpdatedAt], [u0].[UserId]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[CreatedAt], [u].[DeletedAt], [u].[Email], [u].[IsDeleted], [u].[Name], [u].[PasswordHash], [u].[PhotoPath], [u].[Role], [u].[UpdatedAt]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit) AND [u].[Email] = @email AND [u].[IsDeleted] = CAST(0 AS bit)
+) AS [u1]
+LEFT JOIN [UserRefreshToken] AS [u0] ON [u1].[Id] = [u0].[UserId]
+ORDER BY [u1].[Id]
+2026-04-15 21:06:38.776 -03:00 [INF] User profile is available. Using 'C:\Users\Arnaldinho\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-15 21:06:39.065 -03:00 [INF] Now listening on: https://localhost:7298
+2026-04-15 21:06:39.067 -03:00 [INF] Now listening on: http://localhost:5225
+2026-04-15 21:06:39.160 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-15 21:06:39.186 -03:00 [INF] Hosting environment: Development
+2026-04-15 21:06:39.187 -03:00 [INF] Content root path: D:\Projetos\Estudos\C#\SplitRight\SplitRight.API
+2026-04-15 21:09:11.025 -03:00 [INF] User profile is available. Using 'C:\Users\Arnaldinho\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-15 21:09:11.323 -03:00 [INF] Now listening on: https://localhost:7298
+2026-04-15 21:09:11.325 -03:00 [INF] Now listening on: http://localhost:5225
+2026-04-15 21:09:11.375 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-15 21:09:11.377 -03:00 [INF] Hosting environment: Development
+2026-04-15 21:09:11.377 -03:00 [INF] Content root path: D:\Projetos\Estudos\C#\SplitRight\SplitRight.API
+2026-04-15 21:09:29.684 -03:00 [INF] Request starting HTTP/2 POST https://localhost:7298/api/Auth/login - application/json 59
+2026-04-15 21:09:29.845 -03:00 [INF] Executing endpoint 'SplitRight.API.Controllers.AuthController.Login (SplitRight.API)'
+2026-04-15 21:09:29.924 -03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(SplitRight.Application.Features.Auth.Commands.LoginUserCommand, System.Threading.CancellationToken) on controller SplitRight.API.Controllers.AuthController (SplitRight.API).
+2026-04-15 21:09:29.945 -03:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-04-15 21:09:33.867 -03:00 [INF] Executed DbCommand (187ms) [Parameters=[@email='?' (Size = 200)], CommandType='"Text"', CommandTimeout='30']
+SELECT [u1].[Id], [u1].[CreatedAt], [u1].[DeletedAt], [u1].[Email], [u1].[IsDeleted], [u1].[Name], [u1].[PasswordHash], [u1].[PhotoPath], [u1].[Role], [u1].[UpdatedAt], [u0].[Id], [u0].[CreatedAt], [u0].[DeletedAt], [u0].[ExpiresAt], [u0].[IsDeleted], [u0].[IsRevoked], [u0].[ReplacedByToken], [u0].[RevokedAt], [u0].[SessionId], [u0].[Token], [u0].[UpdatedAt], [u0].[UserId]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[CreatedAt], [u].[DeletedAt], [u].[Email], [u].[IsDeleted], [u].[Name], [u].[PasswordHash], [u].[PhotoPath], [u].[Role], [u].[UpdatedAt]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit) AND [u].[Email] = @email AND [u].[IsDeleted] = CAST(0 AS bit)
+) AS [u1]
+LEFT JOIN [UserRefreshToken] AS [u0] ON [u1].[Id] = [u0].[UserId]
+ORDER BY [u1].[Id]
+2026-04-15 21:09:50.552 -03:00 [INF] Executed action SplitRight.API.Controllers.AuthController.Login (SplitRight.API) in 20621.4207ms
+2026-04-15 21:09:50.556 -03:00 [INF] Executed endpoint 'SplitRight.API.Controllers.AuthController.Login (SplitRight.API)'
+2026-04-15 21:09:50.644 -03:00 [ERR] Erro inesperado
+System.ArgumentOutOfRangeException: IDX10720: Unable to create KeyedHashAlgorithm for algorithm 'HS256', the key size must be greater than: '256' bits, key has '232' bits. (Parameter 'keyBytes')
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.ValidateKeySize(Byte[] keyBytes, String algorithm, Int32 expectedNumberOfBytes)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateKeyedHashAlgorithm(Byte[] keyBytes, String algorithm)
+   at Microsoft.IdentityModel.Tokens.SymmetricSignatureProvider.CreateKeyedHashAlgorithm()
+   at Microsoft.IdentityModel.Tokens.DisposableObjectPool`1.CreateInstance()
+   at Microsoft.IdentityModel.Tokens.DisposableObjectPool`1.Allocate()
+   at Microsoft.IdentityModel.Tokens.SymmetricSignatureProvider.GetKeyedHashAlgorithm(Byte[] keyBytes, String algorithm)
+   at Microsoft.IdentityModel.Tokens.SymmetricSignatureProvider.Sign(Byte[] input)
+   at Microsoft.IdentityModel.JsonWebTokens.JwtTokenUtilities.CreateEncodedSignature(String input, SigningCredentials signingCredentials)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.WriteToken(SecurityToken token)
+   at SplitRight.Domain.Contracts.Services.TokenService.GenerateAccessToken(User user, Guid sessionId) in D:\Projetos\Estudos\C#\SplitRight\SplitRight.Domain\Contracts\Services\TokenService.cs:line 43
+   at SplitRight.Application.Features.Auth.Handlers.LoginUserCommandHandler.Handle(LoginUserCommand request, CancellationToken cancellationToken) in D:\Projetos\Estudos\C#\SplitRight\SplitRight.Application\Features\Auth\Handlers\LoginUserCommandHandler.cs:line 43
+   at SplitRight.API.Controllers.AuthController.Login(LoginUserCommand command, CancellationToken cancellationToken) in D:\Projetos\Estudos\C#\SplitRight\SplitRight.API\Controllers\AuthController.cs:line 23
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at SplitRight.API.Middlewares.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in D:\Projetos\Estudos\C#\SplitRight\SplitRight.API\Middlewares\GlobalExceptionMiddleware.cs:line 20
+2026-04-15 21:09:50.726 -03:00 [INF] Request finished HTTP/2 POST https://localhost:7298/api/Auth/login - 500 null application/json; charset=utf-8 21051.0936ms
+2026-04-15 21:09:52.936 -03:00 [INF] Request starting HTTP/2 POST https://localhost:7298/api/Auth/login - application/json 59
+2026-04-15 21:09:52.947 -03:00 [INF] Executing endpoint 'SplitRight.API.Controllers.AuthController.Login (SplitRight.API)'
+2026-04-15 21:09:52.950 -03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(SplitRight.Application.Features.Auth.Commands.LoginUserCommand, System.Threading.CancellationToken) on controller SplitRight.API.Controllers.AuthController (SplitRight.API).
+2026-04-15 21:09:53.095 -03:00 [INF] Executed DbCommand (18ms) [Parameters=[@email='?' (Size = 200)], CommandType='"Text"', CommandTimeout='30']
+SELECT [u1].[Id], [u1].[CreatedAt], [u1].[DeletedAt], [u1].[Email], [u1].[IsDeleted], [u1].[Name], [u1].[PasswordHash], [u1].[PhotoPath], [u1].[Role], [u1].[UpdatedAt], [u0].[Id], [u0].[CreatedAt], [u0].[DeletedAt], [u0].[ExpiresAt], [u0].[IsDeleted], [u0].[IsRevoked], [u0].[ReplacedByToken], [u0].[RevokedAt], [u0].[SessionId], [u0].[Token], [u0].[UpdatedAt], [u0].[UserId]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[CreatedAt], [u].[DeletedAt], [u].[Email], [u].[IsDeleted], [u].[Name], [u].[PasswordHash], [u].[PhotoPath], [u].[Role], [u].[UpdatedAt]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit) AND [u].[Email] = @email AND [u].[IsDeleted] = CAST(0 AS bit)
+) AS [u1]
+LEFT JOIN [UserRefreshToken] AS [u0] ON [u1].[Id] = [u0].[UserId]
+ORDER BY [u1].[Id]
+2026-04-15 21:11:40.216 -03:00 [INF] User profile is available. Using 'C:\Users\Arnaldinho\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-15 21:11:40.506 -03:00 [INF] Now listening on: https://localhost:7298
+2026-04-15 21:11:40.508 -03:00 [INF] Now listening on: http://localhost:5225
+2026-04-15 21:11:40.560 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-15 21:11:40.561 -03:00 [INF] Hosting environment: Development
+2026-04-15 21:11:40.562 -03:00 [INF] Content root path: D:\Projetos\Estudos\C#\SplitRight\SplitRight.API
+2026-04-15 21:12:02.607 -03:00 [INF] Request starting HTTP/2 POST https://localhost:7298/api/Auth/login - application/json 59
+2026-04-15 21:12:02.725 -03:00 [INF] Executing endpoint 'SplitRight.API.Controllers.AuthController.Login (SplitRight.API)'
+2026-04-15 21:12:02.783 -03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(SplitRight.Application.Features.Auth.Commands.LoginUserCommand, System.Threading.CancellationToken) on controller SplitRight.API.Controllers.AuthController (SplitRight.API).
+2026-04-15 21:12:02.806 -03:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-04-15 21:12:06.278 -03:00 [INF] Executed DbCommand (239ms) [Parameters=[@email='?' (Size = 200)], CommandType='"Text"', CommandTimeout='30']
+SELECT [u1].[Id], [u1].[CreatedAt], [u1].[DeletedAt], [u1].[Email], [u1].[IsDeleted], [u1].[Name], [u1].[PasswordHash], [u1].[PhotoPath], [u1].[Role], [u1].[UpdatedAt], [u0].[Id], [u0].[CreatedAt], [u0].[DeletedAt], [u0].[ExpiresAt], [u0].[IsDeleted], [u0].[IsRevoked], [u0].[ReplacedByToken], [u0].[RevokedAt], [u0].[SessionId], [u0].[Token], [u0].[UpdatedAt], [u0].[UserId]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[CreatedAt], [u].[DeletedAt], [u].[Email], [u].[IsDeleted], [u].[Name], [u].[PasswordHash], [u].[PhotoPath], [u].[Role], [u].[UpdatedAt]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit) AND [u].[Email] = @email AND [u].[IsDeleted] = CAST(0 AS bit)
+) AS [u1]
+LEFT JOIN [UserRefreshToken] AS [u0] ON [u1].[Id] = [u0].[UserId]
+ORDER BY [u1].[Id]
+2026-04-15 21:13:01.512 -03:00 [INF] User profile is available. Using 'C:\Users\Arnaldinho\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-15 21:13:01.884 -03:00 [INF] Now listening on: https://localhost:7298
+2026-04-15 21:13:01.886 -03:00 [INF] Now listening on: http://localhost:5225
+2026-04-15 21:13:01.962 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-15 21:13:01.963 -03:00 [INF] Hosting environment: Development
+2026-04-15 21:13:01.964 -03:00 [INF] Content root path: D:\Projetos\Estudos\C#\SplitRight\SplitRight.API
+2026-04-15 21:13:12.337 -03:00 [INF] Request starting HTTP/2 POST https://localhost:7298/api/Auth/login - application/json 59
+2026-04-15 21:13:12.538 -03:00 [INF] Executing endpoint 'SplitRight.API.Controllers.AuthController.Login (SplitRight.API)'
+2026-04-15 21:13:12.572 -03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(SplitRight.Application.Features.Auth.Commands.LoginUserCommand, System.Threading.CancellationToken) on controller SplitRight.API.Controllers.AuthController (SplitRight.API).
+2026-04-15 21:13:12.584 -03:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-04-15 21:13:16.150 -03:00 [INF] Executed DbCommand (277ms) [Parameters=[@email='?' (Size = 200)], CommandType='"Text"', CommandTimeout='30']
+SELECT [u1].[Id], [u1].[CreatedAt], [u1].[DeletedAt], [u1].[Email], [u1].[IsDeleted], [u1].[Name], [u1].[PasswordHash], [u1].[PhotoPath], [u1].[Role], [u1].[UpdatedAt], [u0].[Id], [u0].[CreatedAt], [u0].[DeletedAt], [u0].[ExpiresAt], [u0].[IsDeleted], [u0].[IsRevoked], [u0].[ReplacedByToken], [u0].[RevokedAt], [u0].[SessionId], [u0].[Token], [u0].[UpdatedAt], [u0].[UserId]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[CreatedAt], [u].[DeletedAt], [u].[Email], [u].[IsDeleted], [u].[Name], [u].[PasswordHash], [u].[PhotoPath], [u].[Role], [u].[UpdatedAt]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit) AND [u].[Email] = @email AND [u].[IsDeleted] = CAST(0 AS bit)
+) AS [u1]
+LEFT JOIN [UserRefreshToken] AS [u0] ON [u1].[Id] = [u0].[UserId]
+ORDER BY [u1].[Id]
+2026-04-15 21:13:17.351 -03:00 [INF] Executed DbCommand (15ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = DateTimeOffset), @p2='?' (DbType = DateTimeOffset), @p3='?' (DbType = DateTimeOffset), @p4='?' (DbType = Boolean), @p5='?' (DbType = Boolean), @p6='?' (Size = 4000), @p7='?' (DbType = DateTimeOffset), @p8='?' (DbType = Guid), @p9='?' (Size = 500), @p10='?' (DbType = DateTimeOffset), @p11='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [UserRefreshToken] ([Id], [CreatedAt], [DeletedAt], [ExpiresAt], [IsDeleted], [IsRevoked], [ReplacedByToken], [RevokedAt], [SessionId], [Token], [UpdatedAt], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11);
+2026-04-15 21:13:17.476 -03:00 [INF] Executing OkObjectResult, writing value of type 'SplitRight.Application.DTOs.LoginDTO'.
+2026-04-15 21:13:17.542 -03:00 [INF] Executed action SplitRight.API.Controllers.AuthController.Login (SplitRight.API) in 4961.4368ms
+2026-04-15 21:13:17.549 -03:00 [INF] Executed endpoint 'SplitRight.API.Controllers.AuthController.Login (SplitRight.API)'
+2026-04-15 21:13:17.576 -03:00 [INF] Request finished HTTP/2 POST https://localhost:7298/api/Auth/login - 200 null application/json; charset=utf-8 5246.6142ms

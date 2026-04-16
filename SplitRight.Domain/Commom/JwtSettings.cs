@@ -1,4 +1,5 @@
-﻿namespace MiniFinancial.Domain.Commom { 
+﻿namespace SplitRight.Domain.Commom
+{ 
     public sealed class JwtSettings
     {
         public string Secret { get; set; } = default!;

@@ -6,4 +6,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="MediatR" Version="14.1.0" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SplitRight.Domain\SplitRight.Domain.csproj" />
+    <ProjectReference Include="..\SplitRight.Infrastructure\SplitRight.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

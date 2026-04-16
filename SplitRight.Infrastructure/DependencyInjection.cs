@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MiniFinancial.Infrastructure.Persistence.Repositories;
 using SplitRight.Infrastructure.Contracts.Interfaces;
+using SplitRight.Infrastructure.Contracts.Repositories;
 using SplitRight.Infrastructure.Contracts.Services;
 
 namespace SplitRight.Infrastructure
@@ -29,6 +31,9 @@ namespace SplitRight.Infrastructure
 
             services.AddScoped<IApplicationDbContext, AppDbContext>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserRefreshTokenRepository, UserRefreshTokenRepository>();
 
             return services;
         }

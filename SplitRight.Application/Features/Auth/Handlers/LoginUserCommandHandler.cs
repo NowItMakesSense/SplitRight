@@ -13,21 +13,18 @@ namespace SplitRight.Application.Features.Auth.Handlers
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasherService _passwordHasher;
-        private readonly IJwtTokenGeneratorService _jwtTokenGenerator;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ITokenService _tokenService;
         private readonly IUserRefreshTokenRepository _refreshTokenRepository;
 
         public LoginUserCommandHandler(IUserRepository userRepository, IPasswordHasherService passwordHasher, IUnitOfWork unitOfWork,
-                                       ITokenService tokenService, IUserRefreshTokenRepository refreshTokenRepository, 
-                                       IJwtTokenGeneratorService jwtTokenGenerator)
+                                       ITokenService tokenService, IUserRefreshTokenRepository refreshTokenRepository)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
             _unitOfWork = unitOfWork;
             _tokenService = tokenService;
             _refreshTokenRepository = refreshTokenRepository;
-            _jwtTokenGenerator = jwtTokenGenerator;
         }
 
         public async Task<Result<LoginDTO>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
@@ -55,12 +52,13 @@ namespace SplitRight.Application.Features.Auth.Handlers
 
             var currentUser = new UserDTO(user.Id, user.Name, user.Email);
 
-            return Result<LoginDTO>.Success(new LoginDTO(
-                accessToken,
-                refreshTokenValue,
-                currentUser,
-                DateTimeOffset.UtcNow
-            ));
+            return Result<LoginDTO>.Success(
+                new LoginDTO(
+                    accessToken,
+                    refreshTokenValue,
+                    currentUser,
+                    DateTimeOffset.UtcNow
+                ));
         }
     }
 }

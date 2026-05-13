@@ -1,43 +1,64 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using SplitRight.Domain.Contracts.Enums;
+using SplitRight.Domain.Commom;
+using SplitRight.Domain.Contracts.Entities;
 using SplitRight.Domain.Contracts.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace SplitRight.Domain.Contracts.Services
 {
-    public class JwtTokenGeneratorService : IJwtTokenGeneratorService
+    public sealed class JwtTokenGeneratorService : IJwtTokenGeneratorService
     {
-        private readonly IConfiguration _configuration;
+        private readonly JwtSettings _settings;
 
-        public JwtTokenGeneratorService(IConfiguration configuration)
+        public JwtTokenGeneratorService(IOptions<JwtSettings> settings)
         {
-            _configuration = configuration;
+            _settings = settings.Value;
         }
 
-        public string GenerateToken(Guid userId, string email, UserRole role)
+        public string GenerateAccessToken(User user, Guid sessionId)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var claims = new[]
-            {
-            new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, email),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.Role, role.ToString())
-            };
+            var claims = BuildClaims(user, sessionId);
+            var credentials = GetSigningCredentials();
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: _settings.Issuer,
+                audience: _settings.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(int.Parse(_configuration["Jwt:ExpireMinutes"]!)),
-                signingCredentials: credentials);
+                expires: DateTime.UtcNow.AddMinutes(_settings.AccessTokenExpirationMinutes),
+                signingCredentials: credentials
+            );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public string GenerateRefreshToken()
+        {
+            var randomBytes = RandomNumberGenerator.GetBytes(64);
+
+            return Convert.ToBase64String(randomBytes);
+        }
+
+        private List<Claim> BuildClaims(User user, Guid sessionId)
+        {
+            return
+            [
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role.ToString()),
+                new Claim("sessionId", sessionId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            ];
+        }
+
+        private SigningCredentials GetSigningCredentials()
+        {
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.Secret));
+
+            return new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         }
     }
 }
